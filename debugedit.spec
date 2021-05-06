@@ -9,6 +9,7 @@ BuildRequires:	autoconf
 BuildRequires:	make
 BuildRequires:	pkgconfig(libelf)
 BuildRequires:	pkgconfig(libdw)
+BuildRequires:	help2man
 
 %description
 Tool for editing debug info in ELF binaries
