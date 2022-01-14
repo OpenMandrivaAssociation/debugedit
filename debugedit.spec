@@ -1,7 +1,7 @@
+Summary:	Tool for editing debug info in ELF binaries
 Name:		debugedit
 Version:	5.0
-Release:	1
-Summary:	Tool for editing debug info in ELF binaries
+Release:	2
 Source0:	https://sourceware.org/pub/debugedit/%{version}/%{name}-%{version}.tar.xz
 Group:		Development/Other
 License:	GPLv3+, parts GPLv2, LGPLv2.1
@@ -12,7 +12,7 @@ BuildRequires:	pkgconfig(libdw)
 BuildRequires:	help2man
 
 %description
-Tool for editing debug info in ELF binaries
+Tool for editing debug info in ELF binaries.
 
 %prep
 %autosetup -p1
@@ -34,6 +34,6 @@ ln -s find-debuginfo %{buildroot}%{_bindir}/find-debuginfo.sh
 %{_bindir}/find-debuginfo
 %{_bindir}/find-debuginfo.sh
 %{_bindir}/sepdebugcrcfix
-%{_mandir}/man1/debugedit.1*
-%{_mandir}/man1/find-debuginfo.1*
-%{_mandir}/man1/sepdebugcrcfix.1*
+%doc %{_mandir}/man1/debugedit.1*
+%doc %{_mandir}/man1/find-debuginfo.1*
+%doc %{_mandir}/man1/sepdebugcrcfix.1*
