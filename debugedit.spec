@@ -1,8 +1,10 @@
 Summary:	Tool for editing debug info in ELF binaries
 Name:		debugedit
 Version:	5.0
-Release:	2
+Release:	3
 Source0:	https://sourceware.org/pub/debugedit/%{version}/%{name}-%{version}.tar.xz
+Patch0:		0001-find-debuginfo.sh-decompress-DWARF-compressed-ELF-se.patch
+Patch1:		rpm-4.15.0-find-debuginfo__mga-cfg.diff
 Group:		Development/Other
 License:	GPLv3+, parts GPLv2, LGPLv2.1
 BuildRequires:	autoconf
