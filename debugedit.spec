@@ -3,9 +3,13 @@ Name:		debugedit
 Version:	5.0
 Release:	5
 Source0:	https://sourceware.org/pub/debugedit/%{version}/%{name}-%{version}.tar.xz
-Patch0:		0001-find-debuginfo.sh-decompress-DWARF-compressed-ELF-se.patch
 Patch1:		rpm-4.15.0-find-debuginfo__mga-cfg.diff
-Patch2:		0001-tests-Handle-zero-directory-entry-in-.debug_line-DWA.patch
+Patch2:		0001-use-READELF-not-readelf.patch
+Patch3:		0001-tests-Handle-zero-directory-entry-in-.debug_line-DWA.patch
+Patch4:		0001-find-debuginfo-Pass-j-down-to-dwz.patch
+Patch5:		0002-configure.ac-Use-AC_LINK_IFELSE-for-gz-none-check.patch
+Patch6:		0003-configure.ac-Use-AC_LANG_PROGRAM-for-AC_LINK_IFELSE-.patch
+Patch7:		0004-scripts-find-debuginfo.in-Add-q-quiet.patch
 Group:		Development/Other
 License:	GPLv3+, parts GPLv2, LGPLv2.1
 BuildRequires:	autoconf
@@ -37,9 +41,10 @@ Tool for editing debug info in ELF binaries.
 
 %prep
 %autosetup -p1
-%configure
+autoreconf -f -v -i
 
 %build
+%configure
 %make_build
 
 %install

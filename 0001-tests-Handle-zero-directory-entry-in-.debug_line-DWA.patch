@@ -29,7 +29,7 @@ index e5c9230..6a53365 100644
 +save_CFLAGS="$CFLAGS"
 +CFLAGS="-gdwarf-5"
 +AC_COMPILE_IFELSE([AC_LANG_SOURCE([[int i=0;]],[[/* empty main */]])],
-+  [if readelf --debug-dump=line conftest.o 2>&1 | \
++  [if $READELF --debug-dump=line conftest.o 2>&1 | \
 +   grep "DWARF Version:" 2>&1 | grep "5" > /dev/null 2>&1; \
 +     then ac_cv_dwarf_5_debugline=yes; \
 +     else ac_cv_dwarf_5_debugline=no; fi],
@@ -71,7 +71,7 @@ index 0311d26..725e68e 100644
 @@ -500,8 +502,8 @@ AT_CHECK([[debugedit -b $(pwd) -d /foo/bar/baz ./subdir_bar/bar.o]])
  AT_CHECK([[debugedit -b $(pwd) -d /foo/bar/baz ./baz.o]])
  AT_CHECK([[
- readelf --debug-dump=line foo.o subdir_bar/bar.o baz.o \
+ $READELF --debug-dump=line foo.o subdir_bar/bar.o baz.o \
 -        | grep -A5 "The Directory Table" | grep "^  [123]" \
 -	| cut -f2- -d/ | grep ^foo/ | sort
 +	| grep -A5 "The Directory Table" | grep "^  [0123]" \
@@ -94,7 +94,7 @@ index 0311d26..725e68e 100644
  
  AT_CHECK([[debugedit -b $(pwd) -d /foo/bar/baz ./foobarbaz.part.o]])
  AT_CHECK([[
- readelf --debug-dump=line ./foobarbaz.part.o \
+ $READELF --debug-dump=line ./foobarbaz.part.o \
 -        | grep -A5 "The Directory Table" | grep "^  [123]" \
 -	| cut -f2- -d/ | grep ^foo/ | sort
 +	| grep -A5 "The Directory Table" | grep "^  [0123]" \
@@ -117,7 +117,7 @@ index 0311d26..725e68e 100644
  
  AT_CHECK([[debugedit -b $(pwd) -d /foo/bar/baz ./foobarbaz.exe]])
  AT_CHECK([[
- readelf --debug-dump=line ./foobarbaz.exe \
+ $READELF --debug-dump=line ./foobarbaz.exe \
 -        | grep -A5 "The Directory Table" | grep "^  [123]" \
 -	| cut -f2- -d/ | grep ^foo/ | sort
 +	| grep -A5 "The Directory Table" | grep "^  [0123]" \
@@ -126,5 +126,5 @@ index 0311d26..725e68e 100644
  
  AT_CLEANUP
 -- 
-2.27.0
+2.39.1
 
