@@ -1,0 +1,36 @@
+From 41fc1335b8b364c95a8ee2ed2956bbdfe7957853 Mon Sep 17 00:00:00 2001
+From: Denys Vlasenko <dvlasenk@redhat.com>
+Date: Wed, 14 Jun 2023 16:56:38 +0200
+Subject: [PATCH 10/14] find-debuginfo: remove duplicate filenames when
+ creating debugsources.list
+
+We remove duplicate filenames when we _process_ debugsources.list.
+However, this means that momentarily we may have a very large
+(in the range of *giga*bytes) debugsources.list.
+
+This is unnecessary, we can also remove dups when we *create* it.
+
+Signed-off-by: Denys Vlasenko <dvlasenk@redhat.com>
+---
+ scripts/find-debuginfo.in | 5 ++++-
+ 1 file changed, 4 insertions(+), 1 deletion(-)
+
+diff --git a/scripts/find-debuginfo.in b/scripts/find-debuginfo.in
+index 7dec3c3..e7ac095 100755
+--- a/scripts/find-debuginfo.in
++++ b/scripts/find-debuginfo.in
+@@ -575,7 +575,10 @@ else
+       exit 1
+     fi
+   done
+-  cat "$temp"/debugsources.* >"$SOURCEFILE"
++  # List of sources may have lots of duplicates. A kernel build was seen
++  # with this list reaching 448 megabytes in size. "sort" helps to not have
++  # _two_ sets of 448 megabytes of temp files here.
++  LC_ALL=C sort -z -u "$temp"/debugsources.* >"$SOURCEFILE"
+   cat "$temp"/elfbins.* >"$ELFBINSFILE"
+ fi
+ 
+-- 
+2.42.0
+

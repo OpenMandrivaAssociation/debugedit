@@ -1,0 +1,28 @@
+From d39e210380fb55023a9344f814101ff8ecf61efb Mon Sep 17 00:00:00 2001
+From: Mark Wielaard <mark@klomp.org>
+Date: Sun, 2 Jul 2023 13:35:24 +0200
+Subject: [PATCH 13/14] Always run cpio with --quiet
+
+Printing the number of blocks copied is never really useful.
+
+Signed-off-by: Mark Wielaard <mark@klomp.org>
+---
+ scripts/find-debuginfo.in | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/scripts/find-debuginfo.in b/scripts/find-debuginfo.in
+index 5613f69..ae0818f 100755
+--- a/scripts/find-debuginfo.in
++++ b/scripts/find-debuginfo.in
+@@ -670,7 +670,7 @@ if [ -s "$SOURCEFILE" ]; then
+   # Some compilers generate them as if they are part of the working
+   # directory (which is why we match against ^ or /).
+   LC_ALL=C sort -z -u "$SOURCEFILE" | grep -E -v -z '(^|/)<[a-z _-]+>$' |
+-  (cd "${debug_base_name}"; cpio -pd0mL "${RPM_BUILD_ROOT}${debug_dest_name}")
++  (cd "${debug_base_name}"; cpio -pd0mL --quiet "${RPM_BUILD_ROOT}${debug_dest_name}")
+   # stupid cpio creates new directories in mode 0700,
+   # and non-standard modes may be inherented from original directories, fixup
+   find "${RPM_BUILD_ROOT}${debug_dest_name}" -type d -print0 |
+-- 
+2.42.0
+
