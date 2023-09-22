@@ -53,10 +53,16 @@ autoreconf -f -v -i
 
 %build
 %configure
-%make_build
+%make_build \
+%if %{cross_compiling}
+	HELP2MAN=%{_bindir}/true
+%endif
 
 %install
-%make_install
+%make_install \
+%if %{cross_compiling}
+	HELP2MAN=%{_bindir}/true
+%endif
 
 # For compatibility with older rpm builds
 # This should be removed for OMV 5.0
