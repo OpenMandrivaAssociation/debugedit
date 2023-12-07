@@ -1,0 +1,82 @@
+From aeeddc9e90522a95a2f152c75369c40ad18e4d83 Mon Sep 17 00:00:00 2001
+From: Mark Wielaard <mark@klomp.org>
+Date: Fri, 24 Mar 2023 18:05:41 +0100
+Subject: [PATCH 18/25] debuginfo: check whether compiler needs -fdebug-macro
+
+Some compilers only generate a .debug_macro section when given the
+-fdebug_macro flag.
+
+Signed-off-by: Mark Wielaard <mark@klomp.org>
+---
+ configure.ac       | 13 +++++++++++++
+ tests/atlocal.in   |  1 +
+ tests/debugedit.at |  6 +++---
+ 3 files changed, 17 insertions(+), 3 deletions(-)
+
+diff --git a/configure.ac b/configure.ac
+index c887aed..79803dc 100644
+--- a/configure.ac
++++ b/configure.ac
+@@ -135,6 +135,19 @@ else
+ fi
+ AC_SUBST([GZ_NONE_FLAG])
+ 
++AC_CACHE_CHECK([whether compiler needs -fdebug-macro], ac_cv_debug_macro, [dnl
++save_CFLAGS="$CFLAGS"
++CFLAGS="-fdebug-macro"
++AC_LINK_IFELSE([AC_LANG_PROGRAM()], ac_cv_debug_macro=yes, ac_cv_debug_macro=no)
++CFLAGS="$save_CFLAGS"
++])
++if test "$ac_cv_debug_macro" = "yes"; then
++  DEBUG_MACRO_FLAG="-fdebug-macro"
++else
++  DEBUG_MACRO_FLAG=""
++fi
++AC_SUBST([DEBUG_MACRO_FLAG])
++
+ # And generate the output files.
+ AC_CONFIG_FILES([Makefile])
+ AC_OUTPUT
+diff --git a/tests/atlocal.in b/tests/atlocal.in
+index d916301..01b998c 100644
+--- a/tests/atlocal.in
++++ b/tests/atlocal.in
+@@ -14,3 +14,4 @@ READELF="@READELF@"
+ GDWARF_5_FLAG=@GDWARF_5_FLAG@
+ GZ_NONE_FLAG=@GZ_NONE_FLAG@
+ DWARF_5_DEBUGLINE=@DWARF_5_DEBUGLINE@
++DEBUG_MACRO_FLAG=@DEBUG_MACRO_FLAG@
+diff --git a/tests/debugedit.at b/tests/debugedit.at
+index c0fb343..873e525 100644
+--- a/tests/debugedit.at
++++ b/tests/debugedit.at
+@@ -611,7 +611,7 @@ AT_CLEANUP
+ # ===
+ AT_SETUP([debugedit .debug_macro objects])
+ AT_KEYWORDS([debuginfo] [debugedit])
+-DEBUGEDIT_SETUP
++DEBUGEDIT_SETUP([$DEBUG_MACRO_FLAG])
+ 
+ # We expect 3 for each compile unit.
+ AT_DATA([expout],
+@@ -636,7 +636,7 @@ AT_CLEANUP
+ # ===
+ AT_SETUP([debugedit .debug_macro partial])
+ AT_KEYWORDS([debuginfo] [debugedit])
+-DEBUGEDIT_SETUP
++DEBUGEDIT_SETUP([$DEBUG_MACRO_FLAG])
+ 
+ # We expect 3 for each compile unit.
+ AT_DATA([expout],
+@@ -659,7 +659,7 @@ AT_CLEANUP
+ # ===
+ AT_SETUP([debugedit .debug_macro exe])
+ AT_KEYWORDS([debuginfo] [debugedit])
+-DEBUGEDIT_SETUP
++DEBUGEDIT_SETUP([$DEBUG_MACRO_FLAG])
+ 
+ # We expect 3 for each compile unit.
+ AT_DATA([expout],
+-- 
+2.43.0
+

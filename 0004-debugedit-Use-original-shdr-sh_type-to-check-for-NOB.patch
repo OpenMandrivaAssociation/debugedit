@@ -1,0 +1,33 @@
+From f62fdfc7e8ddb9887f91a021636a4b430c76ec05 Mon Sep 17 00:00:00 2001
+From: Mark Wielaard <mark@klomp.org>
+Date: Mon, 11 Oct 2021 13:57:15 +0200
+Subject: [PATCH 04/25] debugedit: Use original shdr sh_type to check for
+ NOBITS
+
+	* tools/debugedit.c (handle_build_id): Check SHT_NOBITS
+	against dso->shdr[i].sh_type.
+
+https://www.sourceware.org/bugzilla/show_bug.cgi?id=28408
+
+Reported-by: Alexey Brodkin <alexey.brodkin@gmail.com>
+Signed-off-by: Mark Wielaard <mark@klomp.org>
+---
+ tools/debugedit.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/tools/debugedit.c b/tools/debugedit.c
+index 668777a..3f1e830 100644
+--- a/tools/debugedit.c
++++ b/tools/debugedit.c
+@@ -3273,7 +3273,7 @@ handle_build_id (DSO *dso, Elf_Data *build_id,
+ 	  else
+ 	    sha1_process_bytes (x.d_buf, x.d_size, &sha1_ctx);
+ 
+-	  if (u.shdr.sh_type != SHT_NOBITS)
++	  if (dso->shdr[i].sh_type != SHT_NOBITS)
+ 	    {
+ 	      Elf_Data *d = elf_getdata (dso->scn[i], NULL);
+ 	      if (d == NULL)
+-- 
+2.43.0
+

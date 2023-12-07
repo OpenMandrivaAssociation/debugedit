@@ -1,7 +1,7 @@
 From 3185b88a46e46a87a2001173f369bc5fa4d30dfc Mon Sep 17 00:00:00 2001
 From: Mark Wielaard <mark@klomp.org>
 Date: Thu, 29 Jun 2023 14:26:39 +0200
-Subject: [PATCH 11/14] find-debuginfo: Prefix install_dir to PATH
+Subject: [PATCH 21/25] find-debuginfo: Prefix install_dir to PATH
 
 Some distros install a symlink to find-debuginfo[.sh] under the
 old /usr/lib/rpm/ path. But don't have symlinks there for other
@@ -49,5 +49,5 @@ index e7ac095..f87b777 100755
  fi
  
 -- 
-2.42.0
+2.43.0
 

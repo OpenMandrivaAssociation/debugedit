@@ -1,0 +1,168 @@
+From 5bade25a11b5f459f80a875e679664e54b31c8fe Mon Sep 17 00:00:00 2001
+From: Mark Wielaard <mark@klomp.org>
+Date: Sat, 25 Mar 2023 00:49:36 +0100
+Subject: [PATCH 19/25] debugedit: Simplify and extend .debug_line tests
+
+The debugedit .debug_line tests were only checking the directory
+table, skipping the file name table assuming those would not be
+include a directory element. But some compilers output the file
+names as absolute paths (so ignoring the directory table entries,
+which is slightly inefficient). Check both tables now using sed
+to replace the directory strings.
+
+Signed-off-by: Mark Wielaard <mark@klomp.org>
+---
+ tests/debugedit.at | 74 ++++++++++++++++++++++------------------------
+ 1 file changed, 35 insertions(+), 39 deletions(-)
+
+diff --git a/tests/debugedit.at b/tests/debugedit.at
+index 873e525..90e8ed3 100644
+--- a/tests/debugedit.at
++++ b/tests/debugedit.at
+@@ -468,18 +468,17 @@ AT_SETUP([debugedit .debug_line objects DWARF4])
+ AT_KEYWORDS([debuginfo] [debugedit])
+ DEBUGEDIT_SETUP([-gdwarf-4])
+ 
+-AT_DATA([expout],
+-[/foo/bar/baz
+-/foo/bar/baz/subdir_headers
+-])
++$READELF --debug-dump=line foo.o subdir_bar/bar.o baz.o \
++        | grep -E -A5 "The (Directory|File Name) Table" \
++        | grep "^  [[1234]]" \
++        | sed -e "s@$(pwd)@/foo/bar/baz@" | tee expout
+ 
+ AT_CHECK([[debugedit -b $(pwd) -d /foo/bar/baz ./foo.o]])
+ AT_CHECK([[debugedit -b $(pwd) -d /foo/bar/baz ./subdir_bar/bar.o]])
+ AT_CHECK([[debugedit -b $(pwd) -d /foo/bar/baz ./baz.o]])
+ AT_CHECK([[
+ $READELF --debug-dump=line foo.o subdir_bar/bar.o baz.o \
+-        | grep -A3 "The Directory Table" | grep "^  [123]" \
+-	| grep /foo/ | cut -c5- | sort
++        | grep -E -A5 "The (Directory|File Name) Table" | grep "^  [1234]"
+ ]],[0],[expout])
+ 
+ AT_CLEANUP
+@@ -494,19 +493,18 @@ AT_SKIP_IF([test "$GDWARF_5_FLAG" = "no"])
+ AT_SKIP_IF([test "$DWARF_5_DEBUGLINE" = "no"])
+ DEBUGEDIT_SETUP([-gdwarf-5])
+ 
+-AT_DATA([expout],
+-[foo/bar/baz
+-foo/bar/baz/subdir_bar
+-foo/bar/baz/subdir_headers
+-])
++$READELF --debug-dump=line foo.o subdir_bar/bar.o baz.o \
++        | grep -E -A5 "The (Directory|File Name) Table" \
++        | grep "^  [[01234]]" | cut -f3 -d: \
++        | sed -e "s@$(pwd)@/foo/bar/baz@" | tee expout
+ 
+ AT_CHECK([[debugedit -b $(pwd) -d /foo/bar/baz ./foo.o]])
+ AT_CHECK([[debugedit -b $(pwd) -d /foo/bar/baz ./subdir_bar/bar.o]])
+ AT_CHECK([[debugedit -b $(pwd) -d /foo/bar/baz ./baz.o]])
+ AT_CHECK([[
+ $READELF --debug-dump=line foo.o subdir_bar/bar.o baz.o \
+-	| grep -A5 "The Directory Table" | grep "^  [0123]" \
+-	| cut -f2- -d/ | grep ^foo/ | sort -u
++	| grep -E -A5 "The (Directory|File Name) Table" \
++	| grep "^  [01234]" | cut -f3 -d:
+ ]],[0],[expout])
+ 
+ AT_CLEANUP
+@@ -519,16 +517,16 @@ AT_SETUP([debugedit .debug_line partial DWARF4])
+ AT_KEYWORDS([debuginfo] [debugedit])
+ DEBUGEDIT_SETUP([-gdwarf-4])
+ 
+-AT_DATA([expout],
+-[/foo/bar/baz
+-/foo/bar/baz/subdir_headers
+-])
++$READELF --debug-dump=line ./foobarbaz.part.o \
++        | grep -E -A5 "The (Directory|File Name) Table" \
++        | grep "^  [[1234]]" \
++        | sed -e "s@$(pwd)@/foo/bar/baz@" | tee expout
+ 
+ AT_CHECK([[debugedit -b $(pwd) -d /foo/bar/baz ./foobarbaz.part.o]])
+ AT_CHECK([[
+ $READELF --debug-dump=line ./foobarbaz.part.o \
+-        | grep -A3 "The Directory Table" | grep "^  [123]" \
+-	| grep /foo/ | cut -c5- | sort
++        | grep -E -A5 "The (Directory|File Name) Table" \
++	| grep "^  [1234]"
+ ]],[0],[expout])
+ 
+ AT_CLEANUP
+@@ -543,17 +541,16 @@ AT_SKIP_IF([test "$GDWARF_5_FLAG" = "no"])
+ AT_SKIP_IF([test "$DWARF_5_DEBUGLINE" = "no"])
+ DEBUGEDIT_SETUP([-gdwarf-5])
+ 
+-AT_DATA([expout],
+-[foo/bar/baz
+-foo/bar/baz/subdir_bar
+-foo/bar/baz/subdir_headers
+-])
++$READELF --debug-dump=line ./foobarbaz.part.o \
++        | grep -E -A5 "The (Directory|File Name) Table" \
++        | grep "^  [[01234]]" | cut -f3 -d: \
++        | sed -e "s@$(pwd)@/foo/bar/baz@" | tee expout
+ 
+ AT_CHECK([[debugedit -b $(pwd) -d /foo/bar/baz ./foobarbaz.part.o]])
+ AT_CHECK([[
+ $READELF --debug-dump=line ./foobarbaz.part.o \
+-	| grep -A5 "The Directory Table" | grep "^  [0123]" \
+-	| cut -f2- -d/ | grep ^foo/ | sort -u
++	| grep -E -A5 "The (Directory|File Name) Table" \
++	| grep "^  [01234]" | cut -f3 -d:
+ ]],[0],[expout])
+ 
+ AT_CLEANUP
+@@ -566,16 +563,16 @@ AT_SETUP([debugedit .debug_line exe DWARF4])
+ AT_KEYWORDS([debuginfo] [debugedit])
+ DEBUGEDIT_SETUP([-gdwarf-4])
+ 
+-AT_DATA([expout],
+-[/foo/bar/baz
+-/foo/bar/baz/subdir_headers
+-])
++$READELF --debug-dump=line ./foobarbaz.exe \
++        | grep -E -A5 "The (Directory|File Name) Table" \
++        | grep "^  [[1234]]" \
++        | sed -e "s@$(pwd)@/foo/bar/baz@" | tee expout
+ 
+ AT_CHECK([[debugedit -b $(pwd) -d /foo/bar/baz ./foobarbaz.exe]])
+ AT_CHECK([[
+ $READELF --debug-dump=line ./foobarbaz.exe \
+-        | grep -A3 "The Directory Table" | grep "^  [123]" \
+-	| grep /foo/ | cut -c5- | sort
++        | grep -E -A5 "The (Directory|File Name) Table" \
++	| grep "^  [1234]"
+ ]],[0],[expout])
+ 
+ AT_CLEANUP
+@@ -590,17 +587,16 @@ AT_SKIP_IF([test "$GDWARF_5_FLAG" = "no"])
+ AT_SKIP_IF([test "$DWARF_5_DEBUGLINE" = "no"])
+ DEBUGEDIT_SETUP([-gdwarf-5])
+ 
+-AT_DATA([expout],
+-[foo/bar/baz
+-foo/bar/baz/subdir_bar
+-foo/bar/baz/subdir_headers
+-])
++$READELF --debug-dump=line ./foobarbaz.exe \
++        | grep -E -A5 "The (Directory|File Name) Table" \
++        | grep "^  [[01234]]" | cut -f3 -d: \
++        | sed -e "s@$(pwd)@/foo/bar/baz@" | tee expout
+ 
+ AT_CHECK([[debugedit -b $(pwd) -d /foo/bar/baz ./foobarbaz.exe]])
+ AT_CHECK([[
+ $READELF --debug-dump=line ./foobarbaz.exe \
+-	| grep -A5 "The Directory Table" | grep "^  [0123]" \
+-	| cut -f2- -d/ | grep ^foo/ | sort -u
++	| grep -E -A5 "The (Directory|File Name) Table" \
++	| grep "^  [01234]" | cut -f3 -d:
+ ]],[0],[expout])
+ 
+ AT_CLEANUP
+-- 
+2.43.0
+

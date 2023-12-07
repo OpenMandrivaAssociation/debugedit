@@ -1,25 +1,40 @@
 Summary:	Tool for editing debug info in ELF binaries
 Name:		debugedit
 Version:	5.0
-Release:	6
+Release:	7
 Group:		Development/Other
 License:	GPLv3+, parts GPLv2, LGPLv2.1
 Source0:	https://sourceware.org/pub/debugedit/%{version}/%{name}-%{version}.tar.xz
 Patch1:		rpm-4.15.0-find-debuginfo__mga-cfg.diff
 # (tpg) patches from upstream
 Patch2:		0001-use-READELF-not-readelf.patch
-Patch3:		0001-tests-Handle-zero-directory-entry-in-.debug_line-DWA.patch
-Patch4:		0001-find-debuginfo-Pass-j-down-to-dwz.patch
-Patch5:		0002-configure.ac-Use-AC_LINK_IFELSE-for-gz-none-check.patch
-Patch6:		0003-configure.ac-Use-AC_LANG_PROGRAM-for-AC_LINK_IFELSE-.patch
-Patch7:		0004-scripts-find-debuginfo.in-Add-q-quiet.patch
-Patch8:		0005-configure.ac-Update-AC_PROG_CC-for-autoconf-2.70.patch
-Patch9:		0006-debugedit-Use-z-not-Z-as-conversion-specifier.patch
-Patch10:	0010-find-debuginfo-remove-duplicate-filenames-when-creat.patch
-Patch11:	0011-find-debuginfo-Prefix-install_dir-to-PATH.patch
-Patch12:	0012-find-debuginfo-Add-v-verbose-for-per-file-messages.patch
-Patch13:	0013-Always-run-cpio-with-quiet.patch
-Patch14:	0014-sepdebugcrcfix-Do-not-use-LFS64-functions.patch
+Patch3:		0002-tests-Handle-zero-directory-entry-in-.debug_line-DWA.patch
+Patch4:		0003-find-debuginfo.sh-Remove-bogus-shift-after-dwz-singl.patch
+Patch5:		0004-debugedit-Use-original-shdr-sh_type-to-check-for-NOB.patch
+Patch6:		0005-debugedit-Handle-hppa-EM_PARISC-and-R_PARISC_DIR32.patch
+Patch7:		0006-Fix-u-option.patch
+Patch8:		0007-debugedit-Guard-against-NULL-names-returned-by-by-st.patch
+Patch9:		0008-debugedit-Use-standard-libelf-elf_strptr.patch
+Patch10:	0009-debugedit-Skip-calling-edit_dwarf2-if-not-rewriting-.patch
+Patch11:	0010-debugedit-Add-support-for-loongarch.patch
+Patch12:	0011-find-debuginfo-Pass-j-down-to-dwz.patch
+Patch13:	0012-configure.ac-Use-AC_LINK_IFELSE-for-gz-none-check.patch
+Patch14:	0013-configure.ac-Use-AC_LANG_PROGRAM-for-AC_LINK_IFELSE-.patch
+Patch15:	0014-scripts-find-debuginfo.in-Add-q-quiet.patch
+Patch16:	0015-configure.ac-Update-AC_PROG_CC-for-autoconf-2.70.patch
+Patch17:	0016-debugedit-Use-z-not-Z-as-conversion-specifier.patch
+Patch18:	0017-debugedit-skip-.debug_types-tests-if-compiler-doesn-.patch
+Patch19:	0018-debuginfo-check-whether-compiler-needs-fdebug-macro.patch
+Patch20:	0019-debugedit-Simplify-and-extend-.debug_line-tests.patch
+Patch21:	0020-find-debuginfo-remove-duplicate-filenames-when-creat.patch
+Patch22:	0021-find-debuginfo-Prefix-install_dir-to-PATH.patch
+Patch23:	0022-find-debuginfo-Add-v-verbose-for-per-file-messages.patch
+Patch24:	0023-Always-run-cpio-with-quiet.patch
+Patch25:	0024-sepdebugcrcfix-Do-not-use-LFS64-functions.patch
+Patch26:	0025-debugedit-Fix-missing-space-in-help-output.patch
+# Patches from upstream ML that haven't landed in git yet
+# https://sourceware.org/bugzilla/show_bug.cgi?id=28728
+Patch100:	https://inbox.sourceware.org/debugedit/20231204223100.3495057-1-mark@klomp.org/t.mbox.gz
 BuildRequires:	autoconf
 BuildRequires:	make
 BuildRequires:	pkgconfig(libelf)

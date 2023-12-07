@@ -1,7 +1,7 @@
 From 5b23e464528ef988cfcd0a87b3ec8db0520db867 Mon Sep 17 00:00:00 2001
 From: Kalev Lember <klember@redhat.com>
 Date: Thu, 19 Jan 2023 17:03:18 +0100
-Subject: [PATCH 1/4] find-debuginfo: Pass -j down to dwz
+Subject: [PATCH 11/25] find-debuginfo: Pass -j down to dwz
 
 Now that dwz 0.15 supports parallel jobs, add a way to control it from
 here. find-debuginfo already has a -j parameter so we can just extend it
@@ -82,5 +82,5 @@ index b07a52f..8090c84 100755
        && dwz_opts="${dwz_opts} -m .dwz/${dwz_multifile_name}"
      mkdir -p "${RPM_BUILD_ROOT}/usr/lib/debug/.dwz"
 -- 
-2.39.1
+2.43.0
 

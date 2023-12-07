@@ -1,7 +1,7 @@
 From 41fc1335b8b364c95a8ee2ed2956bbdfe7957853 Mon Sep 17 00:00:00 2001
 From: Denys Vlasenko <dvlasenk@redhat.com>
 Date: Wed, 14 Jun 2023 16:56:38 +0200
-Subject: [PATCH 10/14] find-debuginfo: remove duplicate filenames when
+Subject: [PATCH 20/25] find-debuginfo: remove duplicate filenames when
  creating debugsources.list
 
 We remove duplicate filenames when we _process_ debugsources.list.
@@ -32,5 +32,5 @@ index 7dec3c3..e7ac095 100755
  fi
  
 -- 
-2.42.0
+2.43.0
 

@@ -1,7 +1,7 @@
 From 53f27b3c57608fd2e40579869b1fc7b1e3afe294 Mon Sep 17 00:00:00 2001
 From: Mark Wielaard <mark@klomp.org>
 Date: Thu, 23 Mar 2023 17:08:45 +0100
-Subject: [PATCH 06/14] debugedit: Use 'z', not 'Z' as conversion specifier
+Subject: [PATCH 16/25] debugedit: Use 'z', not 'Z' as conversion specifier
 
 Both are valid for size_t but 'z' is the standard one.
 
@@ -24,5 +24,5 @@ index b3422d7..3d75b8f 100644
  
    int i = -1;
 -- 
-2.42.0
+2.43.0
 

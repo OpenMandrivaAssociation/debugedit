@@ -1,7 +1,7 @@
 From 73652fa06c449f55b844890778c4cb592e0df62e Mon Sep 17 00:00:00 2001
 From: Mark Wielaard <mark@klomp.org>
 Date: Fri, 27 Jan 2023 15:23:15 +0100
-Subject: [PATCH 2/4] configure.ac: Use AC_LINK_IFELSE for -gz=none check
+Subject: [PATCH 12/25] configure.ac: Use AC_LINK_IFELSE for -gz=none check
 
 Because of a bug in gcc 13.0 (pre-release) -gz=none does not work
 correctly when linking the final binary in some situations (when
@@ -29,5 +29,5 @@ index f2d1571..1d77e99 100644
  ])
  if test "$ac_cv_gz_none" = "yes"; then
 -- 
-2.39.1
+2.43.0
 

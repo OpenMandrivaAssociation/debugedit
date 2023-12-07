@@ -1,0 +1,28 @@
+From b2b7dc307d7fe6aec0803c56077dfb8b257498de Mon Sep 17 00:00:00 2001
+From: Mark Wielaard <mark@klomp.org>
+Date: Mon, 28 Aug 2023 13:09:27 +0200
+Subject: [PATCH 25/25] debugedit: Fix missing space in --help output
+
+    * tools/debugedit.c (helpText): Add space before -i.
+
+Signed-off-by: Mark Wielaard <mark@klomp.org>
+---
+ tools/debugedit.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/tools/debugedit.c b/tools/debugedit.c
+index 3d75b8f..e654981 100644
+--- a/tools/debugedit.c
++++ b/tools/debugedit.c
+@@ -3054,7 +3054,7 @@ static const char *helpText =
+   "  -s, --build-id-seed=STRING      if recomputing the build ID note use\n"
+   "                                  this string as hash seed\n"
+   "  -n, --no-recompute-build-id     do not recompute build ID note even\n"
+-  "                                  when-i or -s are given\n"
++  "                                  when -i or -s are given\n"
+   "\n"
+   "Help options:\n"
+   "  -?, --help                      Show this help message\n"
+-- 
+2.43.0
+

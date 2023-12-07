@@ -1,7 +1,7 @@
 From 84cfaca936a9dcfc26bd9d59edbdeeae88fc4763 Mon Sep 17 00:00:00 2001
 From: Denys Vlasenko <dvlasenk@redhat.com>
 Date: Thu, 22 Jun 2023 15:31:03 +0200
-Subject: [PATCH 12/14] find-debuginfo: Add -v,--verbose for per file messages
+Subject: [PATCH 22/25] find-debuginfo: Add -v,--verbose for per file messages
 
 Only print messages what big steps we are at without --verbose.
 
@@ -195,5 +195,5 @@ index f87b777..5613f69 100755
 +
 +$quiet || echo "find-debuginfo: done" 2>&1
 -- 
-2.42.0
+2.43.0
 

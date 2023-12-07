@@ -1,7 +1,7 @@
 From e62786537e980f18559f926abc7d669530235a22 Mon Sep 17 00:00:00 2001
 From: Violet Purcell <vimproved@inventati.org>
 Date: Tue, 11 Jul 2023 15:52:57 -0400
-Subject: [PATCH 14/14] sepdebugcrcfix: Do not use LFS64 functions
+Subject: [PATCH 24/25] sepdebugcrcfix: Do not use LFS64 functions
 
 The LFS64 function calls have been gated behind the _LARGEFILE64_SOURCE
 macro in musl 1.2.4, and will be removed altogether in musl 1.2.5. Since
@@ -46,5 +46,5 @@ index da50e6c..7464f6a 100644
  	{
  	  error (0, errno, _("cannot open \"%s\""), fname);
 -- 
-2.42.0
+2.43.0
 

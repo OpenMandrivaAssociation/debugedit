@@ -1,0 +1,30 @@
+From b7ffd93c436d02fb2c486af1d27c2651561311a7 Mon Sep 17 00:00:00 2001
+From: daifan <daifan@uniontech.com>
+Date: Tue, 10 Jan 2023 12:04:39 +0800
+Subject: [PATCH 10/25] debugedit: Add support for loongarch
+
+	* tools/debugedit.c (setup_relbuf): Handle EM_LOONGARCH
+---
+ tools/debugedit.c | 6 ++++++
+ 1 file changed, 6 insertions(+)
+
+diff --git a/tools/debugedit.c b/tools/debugedit.c
+index 9cb5775..b3422d7 100644
+--- a/tools/debugedit.c
++++ b/tools/debugedit.c
+@@ -612,6 +612,12 @@ setup_relbuf (DSO *dso, debug_section *sec, int *reltype)
+ 	  if (rtype != R_E2K_32_ABS)
+ 		  goto fail;
+ 	  break;
++#endif
++#if defined(EM_LOONGARCH) && defined(R_LARCH_32)
++  case EM_LOONGARCH:
++    if (rtype != R_LARCH_32)
++      goto fail;
++    break;
+ #endif
+ 	default:
+ 	fail:
+-- 
+2.43.0
+

@@ -1,7 +1,7 @@
 From b8ac71d9f88202f00a32c5a8b3b4b93bb2fa110a Mon Sep 17 00:00:00 2001
 From: Prarit Bhargava <prarit@redhat.com>
 Date: Thu, 26 Jan 2023 16:08:57 -0500
-Subject: [PATCH 4/4] scripts/find-debuginfo.in: Add -q|--quiet
+Subject: [PATCH 14/25] scripts/find-debuginfo.in: Add -q|--quiet
 
 Projects with a large number of compiled files end up with a large number
 of 'extracting debug info from' messages in the build log.  In the case of
@@ -112,5 +112,5 @@ index 8090c84..7dec3c3 100755
    fi
  done
 -- 
-2.39.1
+2.43.0
 

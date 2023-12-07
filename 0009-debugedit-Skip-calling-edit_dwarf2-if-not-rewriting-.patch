@@ -1,0 +1,35 @@
+From 379b2b95df49d6cebedad3562391c3350882f1a3 Mon Sep 17 00:00:00 2001
+From: Mark Wielaard <mark@klomp.org>
+Date: Wed, 28 Dec 2022 22:23:01 +0100
+Subject: [PATCH 09/25] debugedit: Skip calling edit_dwarf2 if not rewriting
+ and/or listing source
+
+We skipped calling edit_dwarf2 when no base and dest dir were given and
+debugedit was invoked with -i -n. But we never need to call edit_dwarf2
+if we aren't rewriting paths and we don't want to list the source files.
+
+   * tools/debugedit.c (main): Adjust edit_dwarf2 call guard.
+
+https://sourceware.org/bugzilla/show_bug.cgi?id=27639
+---
+ tools/debugedit.c | 4 +++-
+ 1 file changed, 3 insertions(+), 1 deletion(-)
+
+diff --git a/tools/debugedit.c b/tools/debugedit.c
+index d82ae5a..9cb5775 100644
+--- a/tools/debugedit.c
++++ b/tools/debugedit.c
+@@ -3460,7 +3460,9 @@ main (int argc, char *argv[])
+ 	      error (0, 0, "Stabs debuginfo not supported: %s", file);
+ 	      break;
+ 	    }
+-	  if (!(do_build_id && no_recompute_build_id && !base_dir && !dest_dir)
++	  /* We only have to go over the DIE tree if we are rewriting paths
++	     or listing sources.  */
++	  if ((base_dir != NULL || dest_dir != NULL || list_file_fd != -1)
+ 	      && name != NULL && strcmp (name, ".debug_info") == 0)
+ 	    edit_dwarf2 (dso);
+ 
+-- 
+2.43.0
+

@@ -1,7 +1,7 @@
 From 60ee6342ffd643523e54629c56dfe1f29d4d63d3 Mon Sep 17 00:00:00 2001
 From: Mark Wielaard <mark@klomp.org>
 Date: Sat, 28 Jan 2023 20:51:12 +0100
-Subject: [PATCH 05/14] configure.ac: Update AC_PROG_CC for autoconf 2.70
+Subject: [PATCH 15/25] configure.ac: Update AC_PROG_CC for autoconf 2.70
 
 With autoconf 2.70 we must use AC_PROG_CC (which will check for
 c11 and c99), for earlier versions we'll use AC_PROG_CC_C99.
@@ -25,5 +25,5 @@ index 6704dc0..c887aed 100644
  AC_CHECK_TOOL([LD], [ld])
  AC_CHECK_TOOL([READELF], [readelf])
 -- 
-2.42.0
+2.43.0
 
