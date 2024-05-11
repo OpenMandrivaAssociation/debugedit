@@ -1,0 +1,12 @@
+diff -up debugedit-5.0/scripts/find-debuginfo.in.omv~ debugedit-5.0/scripts/find-debuginfo.in
+--- debugedit-5.0/scripts/find-debuginfo.in.omv~	2024-05-12 01:11:57.556620196 +0200
++++ debugedit-5.0/scripts/find-debuginfo.in	2024-05-12 01:12:25.188985567 +0200
+@@ -435,7 +435,7 @@ trap 'rm -rf "$temp"' EXIT
+ # Build a list of unstripped ELF files and their hardlinks
+ touch "$temp/primary"
+ find "$RPM_BUILD_ROOT" ! -path "${debugdir}/*.debug" -type f \
+-     		     \( -perm -0100 -or -perm -0010 -or -perm -0001 \) \
++     		     \( -perm -0100 -or -perm -0010 -or -perm -0001 -or -name "*.so*" \) \
+ 		     -print | LC_ALL=C sort |
+ file -N -f - | sed -n -e 's/^\(.*\):[ 	]*.*ELF.*, not stripped.*/\1/p' |
+ xargs --no-run-if-empty stat -c '%h %D_%i %n' |

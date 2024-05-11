@@ -1,40 +1,45 @@
 Summary:	Tool for editing debug info in ELF binaries
 Name:		debugedit
 Version:	5.0
-Release:	7
+Release:	8
 Group:		Development/Other
 License:	GPLv3+, parts GPLv2, LGPLv2.1
 Source0:	https://sourceware.org/pub/debugedit/%{version}/%{name}-%{version}.tar.xz
-Patch1:		rpm-4.15.0-find-debuginfo__mga-cfg.diff
+Patch0:		rpm-4.15.0-find-debuginfo__mga-cfg.diff
+# Look at *.so* files regardless of their permissions - some projects
+# follow Debian-ish policies of not making libraries executable, and
+# the debuginfo generator runs before the permission fixup
+# (it has to, because the same set of scripts that invokes permission
+# fixup also invokes further stripping).
+Patch1:		debugedit-5.0-look-at-so-files.patch
 # (tpg) patches from upstream
-Patch2:		0001-use-READELF-not-readelf.patch
-Patch3:		0002-tests-Handle-zero-directory-entry-in-.debug_line-DWA.patch
-Patch4:		0003-find-debuginfo.sh-Remove-bogus-shift-after-dwz-singl.patch
-Patch5:		0004-debugedit-Use-original-shdr-sh_type-to-check-for-NOB.patch
-Patch6:		0005-debugedit-Handle-hppa-EM_PARISC-and-R_PARISC_DIR32.patch
-Patch7:		0006-Fix-u-option.patch
-Patch8:		0007-debugedit-Guard-against-NULL-names-returned-by-by-st.patch
-Patch9:		0008-debugedit-Use-standard-libelf-elf_strptr.patch
-Patch10:	0009-debugedit-Skip-calling-edit_dwarf2-if-not-rewriting-.patch
-Patch11:	0010-debugedit-Add-support-for-loongarch.patch
-Patch12:	0011-find-debuginfo-Pass-j-down-to-dwz.patch
-Patch13:	0012-configure.ac-Use-AC_LINK_IFELSE-for-gz-none-check.patch
-Patch14:	0013-configure.ac-Use-AC_LANG_PROGRAM-for-AC_LINK_IFELSE-.patch
-Patch15:	0014-scripts-find-debuginfo.in-Add-q-quiet.patch
-Patch16:	0015-configure.ac-Update-AC_PROG_CC-for-autoconf-2.70.patch
-Patch17:	0016-debugedit-Use-z-not-Z-as-conversion-specifier.patch
-Patch18:	0017-debugedit-skip-.debug_types-tests-if-compiler-doesn-.patch
-Patch19:	0018-debuginfo-check-whether-compiler-needs-fdebug-macro.patch
-Patch20:	0019-debugedit-Simplify-and-extend-.debug_line-tests.patch
-Patch21:	0020-find-debuginfo-remove-duplicate-filenames-when-creat.patch
-Patch22:	0021-find-debuginfo-Prefix-install_dir-to-PATH.patch
-Patch23:	0022-find-debuginfo-Add-v-verbose-for-per-file-messages.patch
-Patch24:	0023-Always-run-cpio-with-quiet.patch
-Patch25:	0024-sepdebugcrcfix-Do-not-use-LFS64-functions.patch
-Patch26:	0025-debugedit-Fix-missing-space-in-help-output.patch
-# Patches from upstream ML that haven't landed in git yet
-# https://sourceware.org/bugzilla/show_bug.cgi?id=28728
-Patch100:	https://inbox.sourceware.org/debugedit/20231204223100.3495057-1-mark@klomp.org/t.mbox.gz
+Patch101:	0001-use-READELF-not-readelf.patch
+Patch102:	0002-tests-Handle-zero-directory-entry-in-.debug_line-DWA.patch
+Patch103:	0003-find-debuginfo.sh-Remove-bogus-shift-after-dwz-singl.patch
+Patch104:	0004-debugedit-Use-original-shdr-sh_type-to-check-for-NOB.patch
+Patch105:	0005-debugedit-Handle-hppa-EM_PARISC-and-R_PARISC_DIR32.patch
+Patch106:	0006-Fix-u-option.patch
+Patch107:	0007-debugedit-Guard-against-NULL-names-returned-by-by-st.patch
+Patch108:	0008-debugedit-Use-standard-libelf-elf_strptr.patch
+Patch109:	0009-debugedit-Skip-calling-edit_dwarf2-if-not-rewriting-.patch
+Patch110:	0010-debugedit-Add-support-for-loongarch.patch
+Patch111:	0011-find-debuginfo-Pass-j-down-to-dwz.patch
+Patch112:	0012-configure.ac-Use-AC_LINK_IFELSE-for-gz-none-check.patch
+Patch113:	0013-configure.ac-Use-AC_LANG_PROGRAM-for-AC_LINK_IFELSE-.patch
+Patch114:	0014-scripts-find-debuginfo.in-Add-q-quiet.patch
+Patch115:	0015-configure.ac-Update-AC_PROG_CC-for-autoconf-2.70.patch
+Patch116:	0016-debugedit-Use-z-not-Z-as-conversion-specifier.patch
+Patch117:	0017-debugedit-skip-.debug_types-tests-if-compiler-doesn-.patch
+Patch118:	0018-debuginfo-check-whether-compiler-needs-fdebug-macro.patch
+Patch119:	0019-debugedit-Simplify-and-extend-.debug_line-tests.patch
+Patch120:	0020-find-debuginfo-remove-duplicate-filenames-when-creat.patch
+Patch121:	0021-find-debuginfo-Prefix-install_dir-to-PATH.patch
+Patch122:	0022-find-debuginfo-Add-v-verbose-for-per-file-messages.patch
+Patch123:	0023-Always-run-cpio-with-quiet.patch
+Patch124:	0024-sepdebugcrcfix-Do-not-use-LFS64-functions.patch
+Patch125:	0025-debugedit-Fix-missing-space-in-help-output.patch
+Patch126:	0026-debugedit-Add-support-for-.debug_str_offsets-DW_FORM.patch
+Patch127:	0027-debugedit-Only-write-the-ELF-file-when-updating-stri.patch
 BuildRequires:	autoconf
 BuildRequires:	make
 BuildRequires:	pkgconfig(libelf)
@@ -79,15 +84,10 @@ autoreconf -f -v -i
 	HELP2MAN=%{_bindir}/true
 %endif
 
-# For compatibility with older rpm builds
-# This should be removed for OMV 5.0
-ln -s find-debuginfo %{buildroot}%{_bindir}/find-debuginfo.sh
-
 %files
 %license COPYING COPYING3 COPYING.LIB
 %{_bindir}/debugedit
 %{_bindir}/find-debuginfo
-%{_bindir}/find-debuginfo.sh
 %{_bindir}/sepdebugcrcfix
 %doc %{_mandir}/man1/debugedit.1*
 %doc %{_mandir}/man1/find-debuginfo.1*

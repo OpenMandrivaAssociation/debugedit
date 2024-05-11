@@ -1,0 +1,73 @@
+From 6dd28bb30320e5236b3b5f79b6b2b41d2b2317bd Mon Sep 17 00:00:00 2001
+From: Mark Wielaard <mark@klomp.org>
+Date: Mon, 18 Mar 2024 23:37:47 +0100
+Subject: [PATCH 27/27] debugedit: Only write the ELF file when updating
+ strings or build-id
+
+Only open the ELF file read/write and write out the data if we
+actually did any elf structure update or updating the build-id.
+
+	* tools/debugedit.c (fdopen_dso): Call elf_begin with
+	ELF_C_READ when not changing dest_dir or build_id,
+	otherwise use ELF_C_RDWR.
+	(main): Call open with O_RDONLY when not changing dest_dir
+	or build_id, otherwise use O_RDWR. Call elf_update with
+	ELF_C_WRITE when rewriting any string, updating any ELF
+	structure or build_id.
+
+https://sourceware.org/bugzilla/show_bug.cgi?id=31504
+
+Signed-off-by: Mark Wielaard <mark@klomp.org>
+---
+ tools/debugedit.c | 21 ++++++++++++++++++---
+ 1 file changed, 18 insertions(+), 3 deletions(-)
+
+diff --git a/tools/debugedit.c b/tools/debugedit.c
+index 7802f9f..f16eecd 100644
+--- a/tools/debugedit.c
++++ b/tools/debugedit.c
+@@ -3261,7 +3261,10 @@ fdopen_dso (int fd, const char *name)
+   DSO *dso = NULL;
+   size_t phnum;
+ 
+-  elf = elf_begin (fd, ELF_C_RDWR, NULL);
++  if (dest_dir == NULL && (!do_build_id || no_recompute_build_id))
++    elf = elf_begin (fd, ELF_C_READ, NULL);
++  else
++    elf = elf_begin (fd, ELF_C_RDWR, NULL);
+   if (elf == NULL)
+     {
+       error (0, 0, "cannot open ELF file: %s", elf_errmsg (-1));
+@@ -3600,7 +3603,10 @@ main (int argc, char *argv[])
+   if (chmod (file, stat_buf.st_mode | S_IRUSR | S_IWUSR) != 0)
+     error (0, errno, "Failed to chmod input file '%s' to make sure we can read and write", file);
+ 
+-  fd = open (file, O_RDWR);
++  if (dest_dir == NULL && (!do_build_id || no_recompute_build_id))
++    fd = open (file, O_RDONLY);
++  else
++    fd = open (file, O_RDWR);
+   if (fd < 0)
+     {
+       error (1, errno, "Failed to open input file '%s'", file);
+@@ -3805,7 +3811,16 @@ main (int argc, char *argv[])
+   if (do_build_id && build_id != NULL)
+     handle_build_id (dso, build_id, build_id_offset, build_id_size);
+ 
+-  if (elf_update (dso->elf, ELF_C_WRITE) < 0)
++  /* If we have done any string replacement or rewrote any section
++     data or did a build_id rewrite we need to write out the new ELF
++     image.  */
++  if ((need_string_replacement
++       || need_strp_update
++       || need_line_strp_update
++       || need_stmt_update
++       || dirty_elf
++       || (build_id && !no_recompute_build_id))
++      && elf_update (dso->elf, ELF_C_WRITE) < 0)
+     {
+       error (1, 0, "Failed to write file: %s", elf_errmsg (elf_errno()));
+     }
+-- 
+2.45.0
+
