@@ -40,6 +40,9 @@ Patch124:	0024-sepdebugcrcfix-Do-not-use-LFS64-functions.patch
 Patch125:	0025-debugedit-Fix-missing-space-in-help-output.patch
 Patch126:	0026-debugedit-Add-support-for-.debug_str_offsets-DW_FORM.patch
 Patch127:	0027-debugedit-Only-write-the-ELF-file-when-updating-stri.patch
+BuildRequires:	automake
+BuildRequires:	libtool-base
+BuildRequires:	slibtool
 BuildRequires:	autoconf
 BuildRequires:	make
 BuildRequires:	pkgconfig(libelf)
