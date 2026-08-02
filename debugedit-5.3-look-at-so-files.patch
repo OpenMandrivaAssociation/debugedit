@@ -1,0 +1,11 @@
+--- debugedit-5.3/scripts/find-debuginfo.in.omv~
++++ debugedit-5.3/scripts/find-debuginfo.in
+@@ -510,7 +510,7 @@
+ touch "$temp/primary"
+ touch "$temp/linked"
+ (
+-    find "$RPM_BUILD_ROOT" ! -path "${debugdir}/*.debug" -type f \( -perm -0100 -or -perm -0010 -or -perm -0001 \) -print |
++    find "$RPM_BUILD_ROOT" ! -path "${debugdir}/*.debug" -type f \( -perm -0100 -or -perm -0010 -or -perm -0001 -or -name "*.so*" \) -print |
+         file -N -f - |
+         sed -n -e 's/^\(.*\):[     ]*.*ELF.*, not stripped.*/\1/p';
+ 

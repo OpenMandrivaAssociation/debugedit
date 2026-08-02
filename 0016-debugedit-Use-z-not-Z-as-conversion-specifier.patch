@@ -1,28 +1,12 @@
-From 53f27b3c57608fd2e40579869b1fc7b1e3afe294 Mon Sep 17 00:00:00 2001
-From: Mark Wielaard <mark@klomp.org>
-Date: Thu, 23 Mar 2023 17:08:45 +0100
-Subject: [PATCH 16/25] debugedit: Use 'z', not 'Z' as conversion specifier
+From: OpenMandriva packaging
+Subject: 0016 use %z not %Z (upstreamed in 5.3)
 
-Both are valid for size_t but 'z' is the standard one.
+Already present in upstream debugedit 5.3; kept as no-op for packaging history.
 
-Signed-off-by: Mark Wielaard <mark@klomp.org>
----
- tools/debugedit.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
-
-diff --git a/tools/debugedit.c b/tools/debugedit.c
-index b3422d7..3d75b8f 100644
---- a/tools/debugedit.c
-+++ b/tools/debugedit.c
-@@ -3185,7 +3185,7 @@ handle_build_id (DSO *dso, Elf_Data *build_id,
- 
-   if (build_id_size != 16 && build_id_size != 20)
-     {
--      error (1, 0, "Cannot handle %Zu-byte build ID", build_id_size);
-+      error (1, 0, "Cannot handle %zu-byte build ID", build_id_size);
-     }
- 
-   int i = -1;
--- 
-2.43.0
-
+--- a/README
++++ b/README
+@@ -3,3 +3,3 @@
+ The debugedit project provides programs and scripts for creating
+-debuginfo and source file distributions, collect build-ids and rewrite
++debuginfo and source file distributions, collect build-ids and rewrite
+ source paths in DWARF data for debugging, tracing and profiling.

@@ -6,9 +6,9 @@ mdv/mga's changes:
 - [2010-03-23] really check that the debug directory we want to search through
   exists, not only the parent
 
---- ./scripts/find-debuginfo.in.4000	2012-07-31 13:11:54.750803552 +0000
-+++ ./scripts/find-debuginfo.in	2012-07-31 13:12:29.900871788 +0000
-@@ -254,8 +254,9 @@ strip_to_debug()
+--- a/scripts/find-debuginfo.in
++++ b/scripts/find-debuginfo.in
+@@ -410,8 +410,9 @@
    $strip_glibs && case "$(file -bi "$2")" in
      application/x-sharedlib*) g=-g ;;
    esac
@@ -20,7 +20,7 @@ mdv/mga's changes:
  }
  
  add_minidebug()
-@@ -340,6 +341,12 @@ while read nlinks inum f; do
+@@ -535,6 +536,12 @@
    echo "$nlinks $inum $f" >>"$temp/primary"
  done
  
@@ -30,10 +30,10 @@ mdv/mga's changes:
 +EXCLUDE_FULL_REGEXP=`perl -e 'print "(", join("|", @ARGV), ")"' $EXCLUDE_FROM_FULL_STRIP`
 +
 +echo $EXCLUDE_REGEXP
- # Strip ELF binaries
- do_file()
- {
-@@ -356,6 +357,10 @@
+ # Check ELF or AR file with eu-elflint if --elf-check is given.
+ # Returns 1 if --elf-check-strict is given and eu-elflint reports issues.
+ # Otherwise returns 0.
+@@ -673,6 +680,10 @@
  {
    local nlinks=$1 inum=$2 f=$3 id link linked
  
@@ -41,10 +41,10 @@ mdv/mga's changes:
 +  return
 +  [ -n "$DISABLE_DEBUG" ] && strip_to_debug "" "$f" && return
 +
+   # reject files already located under /usr/lib/debug, presumably processed
    get_debugfn "$f"
-   [ -f "${debugfn}" ] && return
- 
-@@ -599,7 +599,7 @@ fi
+   [ -f "${debugfn}" ] && return 0
+@@ -973,7 +984,7 @@
  
  if [ -d "${RPM_BUILD_ROOT}/usr/lib" ] || [ -d "${RPM_BUILD_ROOT}/usr/src" ]; then
    ((nout > 0)) ||

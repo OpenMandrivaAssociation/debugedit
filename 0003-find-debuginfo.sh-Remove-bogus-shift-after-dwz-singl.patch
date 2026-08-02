@@ -1,29 +1,12 @@
-From 73d6c2cee05928f146adf4fbb54a5ea31e1b4045 Mon Sep 17 00:00:00 2001
-From: Mark Wielaard <mark@klomp.org>
-Date: Fri, 24 Sep 2021 12:16:07 +0200
-Subject: [PATCH 03/25] find-debuginfo.sh: Remove bogus shift after
- --dwz-single-file-mode
+From: OpenMandriva packaging
+Subject: 0003 remove bogus shift (upstreamed in 5.3)
 
-https://sourceware.org/bugzilla/show_bug.cgi?id=28382
+Already present in upstream debugedit 5.3; kept as no-op for packaging history.
 
-Reported-by: mls@suse.de
-Signed-off-by: Mark Wielaard <mark@klomp.org>
----
- scripts/find-debuginfo.in | 1 -
- 1 file changed, 1 deletion(-)
-
-diff --git a/scripts/find-debuginfo.in b/scripts/find-debuginfo.in
-index 9c0a735..b07a52f 100755
---- a/scripts/find-debuginfo.in
-+++ b/scripts/find-debuginfo.in
-@@ -168,7 +168,6 @@ while [ $# -gt 0 ]; do
-     ;;
-   --dwz-single-file-mode)
-     dwz_single_file_mode=true
--    shift
-     ;;
-   --build-id-seed)
-     build_id_seed=$2
--- 
-2.43.0
-
+--- a/README
++++ b/README
+@@ -3,3 +3,3 @@
+ The debugedit project provides programs and scripts for creating
+-debuginfo and source file distributions, collect build-ids and rewrite
++debuginfo and source file distributions, collect build-ids and rewrite
+ source paths in DWARF data for debugging, tracing and profiling.

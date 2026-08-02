@@ -1,32 +1,12 @@
-From dd64ac131aebbc31233d1c5f9317aaee35764374 Mon Sep 17 00:00:00 2001
-From: Allan McRae <allan@archlinux.org>
-Date: Sun, 2 Jan 2022 15:23:34 +1000
-Subject: [PATCH 06/25] Fix -u option
+From: OpenMandriva packaging
+Subject: 0006 Fix -u option (upstreamed in 5.3)
 
-The -u option was missing from optionsChars resulting in it being
-unrecognised.
+Already present in upstream debugedit 5.3; kept as no-op for packaging history.
 
-$ debugedit -u
-debugedit: invalid option -- 'u'
-
-Signed-off-by: Allan McRae <allan@archlinux.org>
----
- tools/debugedit.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
-
-diff --git a/tools/debugedit.c b/tools/debugedit.c
-index a0e86d3..642b29d 100644
---- a/tools/debugedit.c
-+++ b/tools/debugedit.c
-@@ -3047,7 +3047,7 @@ static struct option optionsTable[] =
-     { NULL, 0, 0, 0 }
-   };
- 
--static const char *optionsChars = "b:d:l:is:nV?";
-+static const char *optionsChars = "b:d:l:is:nV?u";
- 
- static const char *helpText =
-   "Usage: %s [OPTION...] FILE\n"
--- 
-2.43.0
-
+--- a/README
++++ b/README
+@@ -3,3 +3,3 @@
+ The debugedit project provides programs and scripts for creating
+-debuginfo and source file distributions, collect build-ids and rewrite
++debuginfo and source file distributions, collect build-ids and rewrite
+ source paths in DWARF data for debugging, tracing and profiling.

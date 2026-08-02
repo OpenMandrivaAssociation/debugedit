@@ -1,17 +1,17 @@
 Summary:	Tool for editing debug info in ELF binaries
 Name:		debugedit
-Version:	5.0
-Release:	8
+Version:	5.3
+Release:	1
 Group:		Development/Other
 License:	GPLv3+, parts GPLv2, LGPLv2.1
 Source0:	https://sourceware.org/pub/debugedit/%{version}/%{name}-%{version}.tar.xz
-Patch0:		rpm-4.15.0-find-debuginfo__mga-cfg.diff
+Patch0:		rpm-4.15.3-find-debuginfo__mga-cfg.diff
 # Look at *.so* files regardless of their permissions - some projects
 # follow Debian-ish policies of not making libraries executable, and
 # the debuginfo generator runs before the permission fixup
 # (it has to, because the same set of scripts that invokes permission
 # fixup also invokes further stripping).
-Patch1:		debugedit-5.0-look-at-so-files.patch
+Patch1:		debugedit-5.3-look-at-so-files.patch
 # (tpg) patches from upstream
 Patch101:	0001-use-READELF-not-readelf.patch
 Patch102:	0002-tests-Handle-zero-directory-entry-in-.debug_line-DWA.patch

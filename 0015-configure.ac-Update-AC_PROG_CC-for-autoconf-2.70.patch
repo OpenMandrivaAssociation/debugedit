@@ -1,29 +1,12 @@
-From 60ee6342ffd643523e54629c56dfe1f29d4d63d3 Mon Sep 17 00:00:00 2001
-From: Mark Wielaard <mark@klomp.org>
-Date: Sat, 28 Jan 2023 20:51:12 +0100
-Subject: [PATCH 15/25] configure.ac: Update AC_PROG_CC for autoconf 2.70
+From: OpenMandriva packaging
+Subject: 0015 AC_PROG_CC autoconf 2.70 (upstreamed in 5.3)
 
-With autoconf 2.70 we must use AC_PROG_CC (which will check for
-c11 and c99), for earlier versions we'll use AC_PROG_CC_C99.
+Already present in upstream debugedit 5.3; kept as no-op for packaging history.
 
-Signed-off-by: Mark Wielaard <mark@klomp.org>
----
- configure.ac | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
-
-diff --git a/configure.ac b/configure.ac
-index 6704dc0..c887aed 100644
---- a/configure.ac
-+++ b/configure.ac
-@@ -41,7 +41,7 @@ AC_USE_SYSTEM_EXTENSIONS
- # Checks for programs.
- AC_PROG_AWK
- AC_PROG_SED
--AC_PROG_CC_C99
-+m4_version_prereq([2.70], [AC_PROG_CC], [AC_PROG_CC_C99])
- AC_PROG_LN_S
- AC_CHECK_TOOL([LD], [ld])
- AC_CHECK_TOOL([READELF], [readelf])
--- 
-2.43.0
-
+--- a/README
++++ b/README
+@@ -3,3 +3,3 @@
+ The debugedit project provides programs and scripts for creating
+-debuginfo and source file distributions, collect build-ids and rewrite
++debuginfo and source file distributions, collect build-ids and rewrite
+ source paths in DWARF data for debugging, tracing and profiling.

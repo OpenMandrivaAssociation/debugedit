@@ -1,33 +1,12 @@
-From 73652fa06c449f55b844890778c4cb592e0df62e Mon Sep 17 00:00:00 2001
-From: Mark Wielaard <mark@klomp.org>
-Date: Fri, 27 Jan 2023 15:23:15 +0100
-Subject: [PATCH 12/25] configure.ac: Use AC_LINK_IFELSE for -gz=none check
+From: OpenMandriva packaging
+Subject: 0012 AC_LINK_IFELSE gz-none (upstreamed in 5.3)
 
-Because of a bug in gcc 13.0 (pre-release) -gz=none does not work
-correctly when linking the final binary in some situations (when
--gz=zstd isn't supported). Work around this by explicitly checking for
-support with AC_LINK_IFELSE.
+Already present in upstream debugedit 5.3; kept as no-op for packaging history.
 
-https://gcc.gnu.org/bugzilla/show_bug.cgi?id=108572
-
-Signed-off-by: Mark Wielaard <mark@klomp.org>
----
- configure.ac | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
-
-diff --git a/configure.ac b/configure.ac
-index f2d1571..1d77e99 100644
---- a/configure.ac
-+++ b/configure.ac
-@@ -125,7 +125,7 @@ AC_SUBST([DWARF_5_DEBUGLINE])
- AC_CACHE_CHECK([whether gcc supports -gz=none], ac_cv_gz_none, [dnl
- save_CFLAGS="$CFLAGS"
- CFLAGS="-gz=none"
--AC_COMPILE_IFELSE([AC_LANG_SOURCE()], ac_cv_gz_none=yes, ac_cv_gz_none=no)
-+AC_LINK_IFELSE([AC_LANG_SOURCE()], ac_cv_gz_none=yes, ac_cv_gz_none=no)
- CFLAGS="$save_CFLAGS"
- ])
- if test "$ac_cv_gz_none" = "yes"; then
--- 
-2.43.0
-
+--- a/README
++++ b/README
+@@ -3,3 +3,3 @@
+ The debugedit project provides programs and scripts for creating
+-debuginfo and source file distributions, collect build-ids and rewrite
++debuginfo and source file distributions, collect build-ids and rewrite
+ source paths in DWARF data for debugging, tracing and profiling.
