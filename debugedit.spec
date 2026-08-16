@@ -1,7 +1,7 @@
 Summary:	Tool for editing debug info in ELF binaries
 Name:		debugedit
 Version:	5.3
-Release:	1
+Release:	2
 Group:		Development/Other
 License:	GPLv3+, parts GPLv2, LGPLv2.1
 Source0:	https://sourceware.org/pub/debugedit/%{version}/%{name}-%{version}.tar.xz
@@ -92,6 +92,8 @@ autoreconf -f -v -i
 %{_bindir}/debugedit
 %{_bindir}/find-debuginfo
 %{_bindir}/sepdebugcrcfix
+%{_bindir}/debugedit-classify-ar
 %doc %{_mandir}/man1/debugedit.1*
 %doc %{_mandir}/man1/find-debuginfo.1*
 %doc %{_mandir}/man1/sepdebugcrcfix.1*
+%doc %{_mandir}/man1/debugedit-classify-ar.1*
