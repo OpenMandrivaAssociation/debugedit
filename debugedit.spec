@@ -1,7 +1,7 @@
 Summary:	Tool for editing debug info in ELF binaries
 Name:		debugedit
 Version:	5.3
-Release:	2
+Release:	3
 Group:		Development/Other
 License:	GPLv3+, parts GPLv2, LGPLv2.1
 Source0:	https://sourceware.org/pub/debugedit/%{version}/%{name}-%{version}.tar.xz
@@ -47,6 +47,7 @@ BuildRequires:	autoconf
 BuildRequires:	make
 BuildRequires:	pkgconfig(libelf)
 BuildRequires:	pkgconfig(libdw)
+BuildRequires:	pkgconfig(libxxhash)
 BuildRequires:	help2man
 
 # The find-debuginfo.sh script has a couple of tools it needs at runtime.
